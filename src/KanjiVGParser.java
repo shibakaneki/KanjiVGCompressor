@@ -48,9 +48,10 @@ public class KanjiVGParser extends DefaultHandler{
 	}
 	
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
-		if(localName.equals("kanji")){
+		System.out.println("qName:" +qName);
+		if(qName.equals("kanji")){
 			// We start a new kanji element so we erase the old content of _kanji
-			_kanji = "<" +localName;
+			_kanji = "<" +qName;
 		}
 		// TODO: add the missing elements
 	}
