@@ -1,4 +1,9 @@
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Compressor {
@@ -39,6 +44,14 @@ public class Compressor {
 	}
 	
 	public void storeKanjiVGInDB(int codepoint, byte[] kvg){
-		
+		try{
+			Class.forName("org.sqlite.JDBC");
+		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidic2-en.db");
+		    Statement stat = conn.createStatement();
+		    stat.execute("UPDATE entries SET paths='" +kvg +"' WHERE _id=" +codepoint);
+		    conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 }
