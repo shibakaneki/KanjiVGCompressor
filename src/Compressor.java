@@ -8,7 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 public class Compressor {
-	private final String _KVGFILE = "/home/kindov/Projects/KanjiVGCompressor/src/kanjivg.xml";
+	private final String _KVGFILE = "/Users/ShibaKaneki/Projects/Java/KanjiVGCompressor/src/kanjivg.xml";
 	private ArrayList<String> _kanjis;
 	
 	public Compressor(){
@@ -20,7 +20,7 @@ public class Compressor {
 		KanjiVGParser p = new KanjiVGParser();
 		try {
 			p.parse(_KVGFILE);
-			_kanjis = p.parsedKanjis();		
+			_kanjis = p.parsedKanjis();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -40,7 +40,7 @@ public class Compressor {
 	}
 	
 	public void storeKanjiVGInDB(int codepoint, String kvg){
-		System.out.println("Storing " +codepoint +" in database...");
-		
+		System.out.println("----------------");
+		System.out.println(kvg);
 	}
 }

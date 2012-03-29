@@ -48,21 +48,29 @@ public class KanjiVGParser extends DefaultHandler{
 	}
 	
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
-		System.out.println("qName:" +qName);
 		if(qName.equals("kanji")){
 			// We start a new kanji element so we erase the old content of _kanji
 			_kanji = "<" +qName;
+		}else{
+			_kanji += "<" +qName;
 		}
 		// TODO: add the missing elements
+		for(int i=0; i<attributes.getLength(); i++){
+			String name = attributes.getQName(i);
+			String value = attributes.getValue(i);
+			_kanji += " " +name +"='" +value +"'";
+		}
+		
+		// Finally we add the closing bracket
+		_kanji += ">";
 	}
 	
 	public void endElement(String uri, String localName, String qName) throws SAXException{
 		// Close the current element
-		_kanji += ">";
+		_kanji += "</" +qName +">";
 		
 		// If the element was a kanji, store it in the list
-		if(localName.equals("kanji")){
-			System.out.println(_kanji);
+		if(qName.equals("kanji")){
 			_kanjis.add(_kanji);
 		}
 	}
