@@ -1,42 +1,47 @@
 // Inspired from "http://patatos.over-blog.com/article-lire-un-fichier-xml-en-java-avec-sax-47229047.html"
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 
 public class KanjiVGParser extends DefaultHandler{
 
-	private ArrayList<String> _kanjis;	// TODO: use a map<codepoint, kanjiNodeAsString>
+	private ArrayList<KanjiInfo> _kanjis;	
 	private String _kanji;
+	private int _id;
 	
 	public KanjiVGParser(){
-		_kanjis = new ArrayList<String>();
+		_kanjis = new ArrayList<KanjiInfo>();
 		_kanjis.clear();
 		_kanji = "";
 	}
 	
-	public ArrayList<String> parsedKanjis(){
+	public ArrayList<KanjiInfo> parsedKanjis(){
 		return _kanjis;
 	}
 	
 	public void parse(InputStream input) throws ParserConfigurationException, SAXException, IOException{
+		
+		Reader reader = new InputStreamReader(input,"UTF-8");
+		InputSource is = new InputSource(reader);
+		is.setEncoding("UTF-8");
 		SAXParserFactory factory = SAXParserFactory.newInstance();
-		factory.setValidating(false);
-		factory.setNamespaceAware(false);
 		SAXParser parser = factory.newSAXParser();
-		parser.parse(input, this);
+		
+		parser.parse(is, this);
 	}
 	
 	public void parse(String filename) throws FileNotFoundException, ParserConfigurationException, SAXException, IOException{
@@ -54,13 +59,18 @@ public class KanjiVGParser extends DefaultHandler{
 		}else{
 			_kanji += "<" +qName;
 		}
-		// TODO: add the missing elements
+		
 		for(int i=0; i<attributes.getLength(); i++){
 			String name = attributes.getQName(i);
 			String value = attributes.getValue(i);
+			
+			if(name.equals("id") && qName.equals("kanji")){
+				int iUnderscore = value.indexOf("_");
+				String sId = value.substring(iUnderscore + 1);
+				_id = Integer.parseInt(sId,16);
+			}			
 			_kanji += " " +name +"='" +value +"'";
-		}
-		
+		}		
 		// Finally we add the closing bracket
 		_kanji += ">";
 	}
@@ -71,7 +81,10 @@ public class KanjiVGParser extends DefaultHandler{
 		
 		// If the element was a kanji, store it in the list
 		if(qName.equals("kanji")){
-			_kanjis.add(_kanji);
+			KanjiInfo kInf = new KanjiInfo();
+			kInf.setId(_id);
+			kInf.setKvg(_kanji);
+			_kanjis.add(kInf);
 		}
 	}
 	
