@@ -12,7 +12,8 @@ public class KanjiDBHelper {
 	}
 	
 	public void createDatabase(){
-		try{	
+		try{
+			System.out.println("Creating Database...");
 			Class.forName("org.sqlite.JDBC");
 		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidb.db");
 		    Statement stat = conn.createStatement();
