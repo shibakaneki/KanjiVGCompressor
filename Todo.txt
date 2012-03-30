@@ -1,16 +1,11 @@
 TODO
 ----
 o Create the 'entries' table with all the required fields
-	- [Done] Get datas from kanjivg.xml
-		- [Done] Codepoint
-		- [Done] Compressed Paths
-	- [Done] JLPT N-levels
-		- [Done] Check the already done code
 	- Get datas from kanjidic2.xml
 		- Strokes count
 		- Grade
 		- Frequency
-
+		
 o  Create the 'favorites' table that will be used in KanjiNotepad (Android application)
 	- Init the favorites values 
 

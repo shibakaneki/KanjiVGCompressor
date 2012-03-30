@@ -32,6 +32,17 @@ public class KanjiDBHelper {
 		    prep.executeBatch();
 		    conn.setAutoCommit(true);
 		    
+		    stat.executeUpdate("create table info (version, kanjidic2Version, kanjiVGVersion)");
+		    PreparedStatement prep2 = conn.prepareStatement("insert into info values (?, ?, ?);");
+		    prep2.setString(1, "1");
+		    prep2.setString(2, "2011-11-20");
+		    prep2.setString(3, "2012-02-19");
+		    prep2.addBatch();
+		    
+		    conn.setAutoCommit(false);
+		    prep2.executeBatch();
+		    conn.setAutoCommit(true);
+		    
 		    conn.close();
 		}catch(Exception e){
 			e.printStackTrace();
