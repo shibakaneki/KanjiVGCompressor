@@ -70,6 +70,27 @@ public class KanjiDBHelper {
 		}
 	}
 	
+	public void initFavoriteForKanji(int codepoint){
+		try{	
+			Class.forName("org.sqlite.JDBC");
+		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidb.db");
+
+		    PreparedStatement prep = conn.prepareStatement("insert into favorites (_id, state) values (?, ?);");
+
+		    prep.setString(1, String.valueOf(codepoint));
+		    prep.setString(2, String.valueOf(0));
+		    prep.addBatch();
+
+		    conn.setAutoCommit(false);
+		    prep.executeBatch();
+		    conn.setAutoCommit(true);
+		    
+		    conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	private void testDecompress(int codepoint){
 		try{
 			Class.forName("org.sqlite.JDBC");
@@ -126,11 +147,5 @@ public class KanjiDBHelper {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	}
-	
-	public void initFavorites(){
-		System.out.println("Init favorites...");
-		// TODO: Get all kanji ids and for each id, store the value 0 in the db
-		
 	}
 }

@@ -15,11 +15,6 @@ public class main {
 		// Compress each of them
 		c.compress();
 		
-		// ----------------------------
-		// -- Populate the favorites --
-		// ----------------------------
-		dbHelper.initFavorites();
-		
 		// -------------------------
 		// -- Get the JLPT levels --
 		// -------------------------

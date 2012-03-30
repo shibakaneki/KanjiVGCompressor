@@ -5,9 +5,6 @@ o Create the 'entries' table with all the required fields
 		- Strokes count
 		- Grade
 		- Frequency
-		
-o  Create the 'favorites' table that will be used in KanjiNotepad (Android application)
-	- Init the favorites values 
 
 Improvements
 ------------

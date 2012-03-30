@@ -42,6 +42,7 @@ public class Compressor {
 
 				// Store the compressed kanji in DB
 				_db.storeKanjiVGInDB(kanjiId, compressedKVG);
+				_db.initFavoriteForKanji(kanjiId);
 			}
 			
 		} catch (IOException e) {
