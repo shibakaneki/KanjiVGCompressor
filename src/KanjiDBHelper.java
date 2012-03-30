@@ -95,4 +95,10 @@ public class KanjiDBHelper {
 			e.printStackTrace();
 		}
 	}
+	
+	public void initFavorites(){
+		System.out.println("Init favorites...");
+		// TODO: Get all kanji ids and for each id, store the value 0 in the db
+		
+	}
 }
