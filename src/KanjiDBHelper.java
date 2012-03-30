@@ -96,6 +96,27 @@ public class KanjiDBHelper {
 		}
 	}
 	
+	public void saveJLPTLevelForKanji(int codepoint, int level){
+		try{	
+			Class.forName("org.sqlite.JDBC");
+		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidb.db");
+
+		    PreparedStatement prep = conn.prepareStatement("update entries set jlpt=? where _id=?;");
+
+		    prep.setString(1, String.valueOf(level));
+		    prep.setString(2, String.valueOf(codepoint));
+		    prep.addBatch();
+
+		    conn.setAutoCommit(false);
+		    prep.executeBatch();
+		    conn.setAutoCommit(true);
+		    
+		    conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	public void initFavorites(){
 		System.out.println("Init favorites...");
 		// TODO: Get all kanji ids and for each id, store the value 0 in the db

@@ -7,10 +7,12 @@ import java.io.IOException;
 public class JLPTUpdater {
 
 	private static final int MAX_JLPT_LEVEL = 5;
-	private final String PROJECT_DIR = "/home/kindov/Projects/KanjiVGCompressor/src"; // Linux
+	//private final String PROJECT_DIR = "/home/kindov/Projects/KanjiVGCompressor/src"; // Linux
+	private final String PROJECT_DIR = "/Users/ShibaKaneki/Projects/Java/KanjiVGCompressor/src"; // Mac
+	private KanjiDBHelper _db;
 	
 	public JLPTUpdater(){
-		
+		_db = new KanjiDBHelper();
 	}
 	
 	public void updateJLPTLevels(){
@@ -28,7 +30,7 @@ public class JLPTUpdater {
 					
 					String line = "";
 					while((line = reader.readLine()) != null){
-						// TODO : Store the level 'i' at _id 'TextTools.kanjiToCode(new String(line.getBytes(), "UTF-8"))' in entries
+						_db.saveJLPTLevelForKanji(TextTools.kanjiToCode(new String(line.getBytes(), "UTF-8")), i);
 					}
 				}
 				

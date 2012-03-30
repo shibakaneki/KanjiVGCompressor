@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import sun.text.CodePointIterator;
 
 public class Compressor {
-	private final String _KVGFILE = "/home/kindov/Projects/KanjiVGCompressor/src/kanjivg.xml"; // Disgusting but it's just for me...
+	//private final String PROJECT_DIR = "/home/kindov/Projects/KanjiVGCompressor/src"; // Linux
+	private final String PROJECT_DIR = "/Users/ShibaKaneki/Projects/Java/KanjiVGCompressor/src"; // Mac
+	
+	private final String _KVGFILE = PROJECT_DIR +"/kanjivg.xml"; 
 	private ArrayList<KanjiInfo> _kanjis;
 	private KanjiDBHelper _db;
 	
