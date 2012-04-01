@@ -87,6 +87,4 @@ public class KanjiVGParser extends DefaultHandler{
 			_kanjis.add(kInf);
 		}
 	}
-	
-	
 }

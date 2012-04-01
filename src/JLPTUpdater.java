@@ -7,8 +7,6 @@ import java.io.IOException;
 public class JLPTUpdater {
 
 	private static final int MAX_JLPT_LEVEL = 5;
-	//private final String PROJECT_DIR = "/home/kindov/Projects/KanjiVGCompressor/src"; // Linux
-	private final String PROJECT_DIR = "/Users/ShibaKaneki/Projects/Java/KanjiVGCompressor/src"; // Mac
 	private KanjiDBHelper _db;
 	
 	public JLPTUpdater(){
@@ -16,12 +14,10 @@ public class JLPTUpdater {
 	}
 	
 	public void updateJLPTLevels(){
-		System.out.println("Updating JLPT levels...");
-
 		for(int i=1; i<=MAX_JLPT_LEVEL; i++){
 			try {
 				
-				File f  = new File(PROJECT_DIR +"/n" +i +"_list.txt");
+				File f  = new File(main.PROJECT_DIR +"/n" +i +"_list.txt");
 				if(!f.exists() && f.length() < 0){
 					System.out.println("Error while reading file");
 				}else{

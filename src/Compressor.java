@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import sun.text.CodePointIterator;
 
 public class Compressor {
-	//private final String PROJECT_DIR = "/home/kindov/Projects/KanjiVGCompressor/src"; // Linux
-	private final String PROJECT_DIR = "/Users/ShibaKaneki/Projects/Java/KanjiVGCompressor/src"; // Mac
 	
-	private final String _KVGFILE = PROJECT_DIR +"/kanjivg.xml"; 
 	private ArrayList<KanjiInfo> _kanjis;
 	private KanjiDBHelper _db;
 	
@@ -21,10 +18,9 @@ public class Compressor {
 	}
 	
 	public void getKanjis(){
-		System.out.println("Getting kanjis from KanjiVG.xml...");
 		KanjiVGParser p = new KanjiVGParser();
 		try {
-			p.parse(_KVGFILE);
+			p.parse(main._KVGFILE);
 			_kanjis = p.parsedKanjis();
 		} catch (Exception e) {
 			e.printStackTrace();

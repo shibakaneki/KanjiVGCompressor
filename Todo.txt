@@ -1,11 +1,4 @@
 TODO
 ----
-o Create the 'entries' table with all the required fields
-	- Get datas from kanjidic2.xml
-		- Strokes count
-		- Grade
-		- Frequency
+o Add the reading informations
 
-Improvements
-------------
-o Use proper data types in the db

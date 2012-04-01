@@ -13,15 +13,15 @@ public class KanjiDBHelper {
 	
 	public void createDatabase(){
 		try{
-			System.out.println("Creating Database...");
 			Class.forName("org.sqlite.JDBC");
 		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidb.db");
 		    Statement stat = conn.createStatement();
 		    stat.executeUpdate("drop table if exists entries;");
 		    stat.executeUpdate("drop table if exists favorites;");
 		    stat.executeUpdate("drop table if exists android_metadata;");
-		    stat.executeUpdate("create table entries (_id, grade, strokeCount, frequency, jlpt, paths);");
-		    stat.executeUpdate("create table favorites (_id, state)");
+		    stat.executeUpdate("drop table if exists info;");
+		    stat.executeUpdate("create table entries (_id smallint(5), grade smallint(5), strokeCount smallint(2), frequency smallint(2), jlpt smallint(1), paths);");
+		    stat.executeUpdate("create table favorites (_id smallint(5), state smallint(1))");
 		    
 		    stat.executeUpdate("create table android_metadata (locale)");
 		    PreparedStatement prep = conn.prepareStatement("insert into android_metadata values (?);");
@@ -135,8 +135,38 @@ public class KanjiDBHelper {
 
 		    PreparedStatement prep = conn.prepareStatement("update entries set jlpt=? where _id=?;");
 
-		    prep.setString(1, String.valueOf(level));
-		    prep.setString(2, String.valueOf(codepoint));
+		    prep.setInt(1, level);
+		    prep.setInt(2, codepoint);
+		    prep.addBatch();
+
+		    conn.setAutoCommit(false);
+		    prep.executeBatch();
+		    conn.setAutoCommit(true);
+		    
+		    conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	// create table entries (_id, grade, strokeCount, frequency, jlpt, paths)
+	public void saveInfosFromKanji(KanjiInfo kanji){
+		try{	
+			Class.forName("org.sqlite.JDBC");
+		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidb.db");
+
+		    PreparedStatement prep = conn.prepareStatement("update entries set grade=?, strokeCount=?, frequency=? where _id=?;");
+
+		    if(-1 != kanji.grade()){
+		    	prep.setInt(1, kanji.grade());
+		    }
+		    if(-1 != kanji.strokeCount()){
+		    	prep.setInt(2, kanji.strokeCount());
+		    }
+		    if(-1 != kanji.frequency()){
+		    	prep.setInt(3, kanji.frequency());
+		    }
+		    prep.setInt(4, kanji.id());
 		    prep.addBatch();
 
 		    conn.setAutoCommit(false);
