@@ -57,7 +57,8 @@ public class KanjiDBHelper {
 		    PreparedStatement prep = conn.prepareStatement("insert into entries (_id, paths) values (?, ?);");
 
 		    prep.setString(1, String.valueOf(codepoint));
-		    prep.setString(2, String.valueOf(kvg));
+		    prep.setBytes(2, kvg);
+		    //prep.setString(2, String.valueOf(kvg));
 		    prep.addBatch();
 
 		    conn.setAutoCommit(false);
@@ -91,7 +92,7 @@ public class KanjiDBHelper {
 		}
 	}
 	
-	private void testDecompress(int codepoint){
+	public void testDecompress(int codepoint){
 		try{
 			Class.forName("org.sqlite.JDBC");
 			
@@ -99,30 +100,14 @@ public class KanjiDBHelper {
 		    Statement stat = conn.createStatement();
 		    
 		    ResultSet rs = stat.executeQuery("select paths from entries where _id=" +codepoint +";");
-		    String compressedData = rs.getString("paths");
+		    byte[] compressedData = rs.getBytes("paths");
 		    System.out.println("paths = " + compressedData);
-		    System.out.println(compressedData.getBytes());
+		    //System.out.println(compressedData.getBytes());
 
 		    rs.close();
 		    conn.close();
 		    
-		    System.out.println(ZipTools.decompress(compressedData.getBytes()));
-			
-			
-			// TODO: Uncomment this code because it's the kanjidb one
-			/*Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidic2-en.db");
-		    Statement stat = conn.createStatement();
-		    
-		    ResultSet rs = stat.executeQuery("select paths from entries where _id=" +codepoint +";");
-		    String compressedData = rs.getString("paths");
-		    System.out.println("paths = " + compressedData);
-		    System.out.println(compressedData.getBytes());
-
-		    rs.close();
-		    conn.close();
-		    
-		    System.out.println(ZipTools.decompress(compressedData.getBytes()));
-		    */
+		    System.out.println(ZipTools.decompress(compressedData));
 		}catch(Exception e){
 			e.printStackTrace();
 		}

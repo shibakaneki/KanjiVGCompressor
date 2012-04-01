@@ -13,7 +13,7 @@ public class main {
 		// -----------------------
 		System.out.println("Creating database...");
 		KanjiDBHelper dbHelper = new KanjiDBHelper();
-		dbHelper.createDatabase();
+		dbHelper.createDatabase(); 
 
 		// --------------------
 		// -- Get the Kanjis --
@@ -52,8 +52,7 @@ public class main {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		
+
 		System.out.println("Done!");
 	}
 }
