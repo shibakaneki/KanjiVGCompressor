@@ -22,6 +22,9 @@ public class KanjiDBHelper {
 		    stat.executeUpdate("drop table if exists info;");
 		    stat.executeUpdate("create table entries (_id smallint(5), grade smallint(5), strokeCount smallint(2), frequency smallint(2), jlpt smallint(1), paths);");
 		    stat.executeUpdate("create table favorites (_id smallint(5), state smallint(1))");
+		    stat.executeUpdate("create table onYomi (_id smallint(5), yomi);");
+		    stat.executeUpdate("create table kunYomi (_id smallint(5), yomi);");
+		    stat.executeUpdate("create table words (_id smallint(5), word);");
 		    
 		    stat.executeUpdate("create table android_metadata (locale)");
 		    PreparedStatement prep = conn.prepareStatement("insert into android_metadata values (?);");
