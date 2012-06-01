@@ -27,6 +27,7 @@ public class KanjiDic2Parser extends DefaultHandler {
 	private boolean _r_type;
 	private boolean _onyomi;
 	private boolean _kunyomi;
+	private boolean _meaning;
 	
 	public KanjiDic2Parser(){
 		_kanjis = new ArrayList<KanjiInfo>();
@@ -39,6 +40,7 @@ public class KanjiDic2Parser extends DefaultHandler {
 		_r_type = false;
 		_onyomi = false;
 		_kunyomi = false;
+		_meaning = false;
 	}
 	
 	public ArrayList<KanjiInfo> parsedKanjis(){
@@ -90,6 +92,19 @@ public class KanjiDic2Parser extends DefaultHandler {
 					break;
 				}			
 			}
+		}else if(qName.equals("meaning")){
+			boolean english = true;
+			for(int i=0; i<attributes.getLength(); i++){
+				String name = attributes.getQName(i);
+				String value = attributes.getValue(i);
+				if(name.equals("m_lang")){
+					english = false;
+					break;
+				}
+			}
+			if(english){
+				_meaning = true;
+			}
 		}
 	}
 	
@@ -116,6 +131,9 @@ public class KanjiDic2Parser extends DefaultHandler {
 			_r_type = false;
 			_onyomi = false;
 			_kunyomi = false;
+		}else if(_meaning){
+			_kanji.addMeaning(value);
+			_meaning = false;
 		}
 	}
 	

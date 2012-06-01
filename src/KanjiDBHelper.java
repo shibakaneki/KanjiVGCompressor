@@ -25,6 +25,7 @@ public class KanjiDBHelper {
 		    stat.executeUpdate("create table onYomi (_id smallint(5), yomi);");
 		    stat.executeUpdate("create table kunYomi (_id smallint(5), yomi);");
 		    stat.executeUpdate("create table words (_id smallint(5), word);");
+		    stat.executeUpdate("create table meanings (_id smallint(5), meaning);");
 		    
 		    stat.executeUpdate("create table android_metadata (locale)");
 		    PreparedStatement prep = conn.prepareStatement("insert into android_metadata values (?);");
@@ -143,6 +144,7 @@ public class KanjiDBHelper {
 			Class.forName("org.sqlite.JDBC");
 		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidb.db");
 
+		    // Update the 'entries' table
 		    PreparedStatement prep = conn.prepareStatement("update entries set grade=?, strokeCount=?, frequency=? where _id=?;");
 
 		    if(-1 != kanji.grade()){
@@ -160,6 +162,48 @@ public class KanjiDBHelper {
 		    conn.setAutoCommit(false);
 		    prep.executeBatch();
 		    conn.setAutoCommit(true);
+		    
+		    // Update the 'onYomi' table
+		    for(int i=0; i<kanji.onyomi().size(); i++){
+		    	String yomi = kanji.onyomi().get(i);
+		    	prep = conn.prepareStatement("insert into onYomi (_id, yomi) values (?, ?);");
+
+			    prep.setInt(1, kanji.id());
+			    prep.setString(2, yomi);
+			    prep.addBatch();
+
+			    conn.setAutoCommit(false);
+			    prep.executeBatch();
+			    conn.setAutoCommit(true);
+		    }
+		    
+		    // Update the 'kunYomi' table
+		    for(int i=0; i<kanji.kunyomi().size(); i++){
+		    	String yomi = kanji.kunyomi().get(i);
+		    	prep = conn.prepareStatement("insert into kunYomi (_id, yomi) values (?, ?);");
+
+			    prep.setInt(1, kanji.id());
+			    prep.setString(2, yomi);
+			    prep.addBatch();
+
+			    conn.setAutoCommit(false);
+			    prep.executeBatch();
+			    conn.setAutoCommit(true);
+		    }
+		    
+		    // Update the 'meanings' table
+		    for(int i=0; i<kanji.meanings().size(); i++){
+		    	String meaning = kanji.meanings().get(i);
+		    	prep = conn.prepareStatement("insert into meanings (_id, meaning) values (?, ?);");
+
+			    prep.setInt(1, kanji.id());
+			    prep.setString(2, meaning);
+			    prep.addBatch();
+
+			    conn.setAutoCommit(false);
+			    prep.executeBatch();
+			    conn.setAutoCommit(true);
+		    }
 		    
 		    conn.close();
 		}catch(Exception e){

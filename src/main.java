@@ -42,13 +42,14 @@ public class main {
 			
 			System.out.println("Parsing KanjiDic2...");
 			
-				KanjiDic2Parser dico = new KanjiDic2Parser();
-				dico.parse(_KDIC2FILE +"_clean.xml");
-				ArrayList<KanjiInfo> kanjis = dico.parsedKanjis();
-				for(int i=0; i<kanjis.size(); i++){
-					KanjiInfo kanji = kanjis.get(i);
-					dbHelper.saveInfosFromKanji(kanji);
-				}
+			KanjiDic2Parser dico = new KanjiDic2Parser();
+			dico.parse(_KDIC2FILE +"_clean.xml");
+			ArrayList<KanjiInfo> kanjis = dico.parsedKanjis();
+			System.out.println("Saving kanjis infos into DB...");
+			for(int i=0; i<kanjis.size(); i++){
+				KanjiInfo kanji = kanjis.get(i);
+				dbHelper.saveInfosFromKanji(kanji);
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

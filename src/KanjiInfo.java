@@ -9,6 +9,8 @@ public class KanjiInfo {
 	private int _frequency;
 	private ArrayList<String> _onyomi;
 	private ArrayList<String> _kunyomi;
+	private ArrayList<String> _meaning;
+	
 
 	// TODO : Add the meaning and deal with the yomi when the description zone will be implemented.
 	
@@ -20,6 +22,7 @@ public class KanjiInfo {
 		_frequency = -1;
 		_onyomi = new ArrayList<String>();
 		_kunyomi = new ArrayList<String>();
+		_meaning = new ArrayList<String>();
 	}
 	
 	public void setId(int id){
@@ -76,5 +79,13 @@ public class KanjiInfo {
 	
 	public ArrayList<String> kunyomi(){
 		return _kunyomi;
+	}
+	
+	public void addMeaning(String m){
+		_meaning.add(m);
+	}
+	
+	public ArrayList<String> meanings(){
+		return _meaning;
 	}
 }

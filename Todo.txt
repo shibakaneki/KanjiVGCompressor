@@ -1,5 +1,5 @@
 TODO
 ----
-o Add the reading informations
+o Add some example words in the db
 
 
