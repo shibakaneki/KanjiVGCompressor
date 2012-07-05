@@ -20,7 +20,7 @@ public class KanjiDBHelper {
 		    stat.executeUpdate("drop table if exists favorites;");
 		    stat.executeUpdate("drop table if exists android_metadata;");
 		    stat.executeUpdate("drop table if exists info;");
-		    stat.executeUpdate("create table entries (_id smallint(5), grade smallint(5), strokeCount smallint(2), frequency smallint(2), jlpt smallint(1), paths);");
+		    stat.executeUpdate("create table entries (_id smallint(5), grade smallint(5), strokeCount smallint(2), frequency smallint(2), jlpt smallint(1), onyomi, kunyomi, paths);");
 		    stat.executeUpdate("create table favorites (_id smallint(5), state smallint(1))");
 		    stat.executeUpdate("create table onYomi (_id smallint(5), yomi);");
 		    stat.executeUpdate("create table kunYomi (_id smallint(5), yomi);");
@@ -138,6 +138,48 @@ public class KanjiDBHelper {
 		}
 	}
 	
+	public void saveONYomiForKanji(int codepoint, String yomi){
+		try{	
+			Class.forName("org.sqlite.JDBC");
+		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidb.db");
+
+		    PreparedStatement prep = conn.prepareStatement("update entries set onyomi=? where _id=?;");
+
+		    prep.setString(1, yomi);
+		    prep.setInt(2, codepoint);
+		    prep.addBatch();
+
+		    conn.setAutoCommit(false);
+		    prep.executeBatch();
+		    conn.setAutoCommit(true);
+		    
+		    conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveKUNYomiForKanji(int codepoint, String yomi){
+		try{	
+			Class.forName("org.sqlite.JDBC");
+		    Connection conn = DriverManager.getConnection("jdbc:sqlite:kanjidb.db");
+
+		    PreparedStatement prep = conn.prepareStatement("update entries set kunyomi=? where _id=?;");
+
+		    prep.setString(1, yomi);
+		    prep.setInt(2, codepoint);
+		    prep.addBatch();
+
+		    conn.setAutoCommit(false);
+		    prep.executeBatch();
+		    conn.setAutoCommit(true);
+		    
+		    conn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	// create table entries (_id, grade, strokeCount, frequency, jlpt, paths)
 	public void saveInfosFromKanji(KanjiInfo kanji){
 		try{	
@@ -164,8 +206,13 @@ public class KanjiDBHelper {
 		    conn.setAutoCommit(true);
 		    
 		    // Update the 'onYomi' table
+		    String onyomis = "";
 		    for(int i=0; i<kanji.onyomi().size(); i++){
+		    	if(i>0){
+		    		onyomis += ",";
+		    	}
 		    	String yomi = kanji.onyomi().get(i);
+		    	onyomis += yomi;
 		    	prep = conn.prepareStatement("insert into onYomi (_id, yomi) values (?, ?);");
 
 			    prep.setInt(1, kanji.id());
@@ -177,9 +224,17 @@ public class KanjiDBHelper {
 			    conn.setAutoCommit(true);
 		    }
 		    
+		    // HACK: Store onyomis as string
+		    saveONYomiForKanji(kanji.id(), onyomis);
+		    
 		    // Update the 'kunYomi' table
+		    String kunyomis = "";
 		    for(int i=0; i<kanji.kunyomi().size(); i++){
+		    	if(i>0){
+		    		kunyomis += ",";
+		    	}
 		    	String yomi = kanji.kunyomi().get(i);
+		    	kunyomis += yomi;
 		    	prep = conn.prepareStatement("insert into kunYomi (_id, yomi) values (?, ?);");
 
 			    prep.setInt(1, kanji.id());
@@ -190,6 +245,8 @@ public class KanjiDBHelper {
 			    prep.executeBatch();
 			    conn.setAutoCommit(true);
 		    }
+		    // HACK: Store kunyomis as string
+		    saveKUNYomiForKanji(kanji.id(), kunyomis);
 		    
 		    // Update the 'meanings' table
 		    for(int i=0; i<kanji.meanings().size(); i++){
